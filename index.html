@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLRC Weather Reporter</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js for 3D animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo">
+                <i class="fas fa-cloud-sun fa-5x"></i>
+            </div>
+            <h1 class="splash-title">NLRC Weather Reporter</h1>
+            <p class="splash-subtitle">Your Trusted Weather Source</p>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="main-container" style="display: none;">
+        <header>
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-cloud-sun"></i>
+                    <h1>NLRC Weather Reporter</h1>
+                </div>
+                <p class="tagline">Real-time Weather Intelligence</p>
+            </div>
+        </header>
+
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="city-input" placeholder="Enter city name...">
+                <button id="search-btn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+                <button id="location-btn" title="Use my location"><i
+                        class="fa-solid fa-location-crosshairs"></i></button>
+            </div>
+            <div class="search-history" id="search-history">
+                <!-- Recent searches will appear here -->
+            </div>
+        </div>
+
+        <div class="weather-container" id="weather-container" style="display: none;">
+            <!-- Current Weather -->
+            <div class="current-weather">
+                <div class="weather-info">
+                    <h2 id="city-name">City Name</h2>
+                    <p id="current-date">Date</p>
+                    <div class="temp-container">
+                        <img id="weather-icon" src="" alt="Weather Icon">
+                        <div class="temp-details">
+                            <h3 id="temperature">--°C</h3>
+                            <p class="feels-like">Feels like <span id="feels-like">--°C</span></p>
+                        </div>
+                    </div>
+                    <p id="weather-desc">Description</p>
+                </div>
+                <div class="weather-details">
+                    <div class="detail-card">
+                        <i class="fa-solid fa-wind"></i>
+                        <div>
+                            <p>Wind Speed</p>
+                            <span id="wind-speed">-- km/h</span>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <i class="fa-solid fa-droplet"></i>
+                        <div>
+                            <p>Humidity</p>
+                            <span id="humidity">--%</span>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <i class="fa-solid fa-gauge"></i>
+                        <div>
+                            <p>Pressure</p>
+                            <span id="pressure">-- hPa</span>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <i class="fa-solid fa-eye"></i>
+                        <div>
+                            <p>Visibility</p>
+                            <span id="visibility">-- km</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather Summary Section -->
+            <div class="weather-summary">
+                <div class="summary-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Weather Summary</h3>
+                </div>
+                <div class="summary-content" id="weather-summary">
+                    <p class="summary-text" id="summary-text">Loading weather summary...</p>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-thermometer-half"></i>
+                            <span id="summary-temp-range">--</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-cloud"></i>
+                            <span id="summary-condition">--</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-wind"></i>
+                            <span id="summary-wind">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Weather Information -->
+            <div class="additional-info">
+                <div class="info-card">
+                    <div class="info-header">
+                        <i class="fa-solid fa-sun"></i>
+                        <h4>Sun & Moon</h4>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-item">
+                            <i class="fa-solid fa-sunrise"></i>
+                            <div>
+                                <p>Sunrise</p>
+                                <span id="sunrise">--:--</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-sunset"></i>
+                            <div>
+                                <p>Sunset</p>
+                                <span id="sunset">--:--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-header">
+                        <i class="fa-solid fa-smog"></i>
+                        <h4>Air Quality</h4>
+                    </div>
+                    <div class="info-content">
+                        <div class="aqi-display">
+                            <div class="aqi-value" id="aqi-value">--</div>
+                            <div class="aqi-label" id="aqi-label">Loading...</div>
+                        </div>
+                        <div class="aqi-details" id="aqi-details">
+                            <p>PM2.5: <span id="pm25">--</span> μg/m³</p>
+                            <p>PM10: <span id="pm10">--</span> μg/m³</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-header">
+                        <i class="fa-solid fa-temperature-half"></i>
+                        <h4>Temperature Details</h4>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-item">
+                            <i class="fa-solid fa-temperature-high"></i>
+                            <div>
+                                <p>Max Temp</p>
+                                <span id="temp-max">--°C</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-temperature-low"></i>
+                            <div>
+                                <p>Min Temp</p>
+                                <span id="temp-min">--°C</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5-Day Forecast -->
+            <div class="forecast-section">
+                <h3><i class="fa-solid fa-calendar-days"></i> 5-Day Forecast</h3>
+                <div class="forecast-grid" id="forecast-grid">
+                    <!-- Forecast cards will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading & Error States -->
+        <div class="loading" id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Fetching weather data...</p>
+        </div>
+
+        <div class="error-message" id="error-message" style="display: none;">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <p id="error-text">City not found. Please try again.</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="animations.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
